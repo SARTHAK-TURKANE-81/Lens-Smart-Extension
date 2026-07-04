@@ -1,6 +1,6 @@
 # Lens⁸¹
 
-A lightweight Chrome extension that helps you tell whether a paper on Google Scholar is a **Research Paper** or a **Review Paper** — right in the search results, using AI-powered abstract classification.
+A lightweight Chrome extension that helps you tell whether a paper on Google Scholar is a **Research Paper** or a **Review Paper** - right in the search results, using AI-powered abstract classification.
 
 ## Why I Built This
 
@@ -76,7 +76,7 @@ Suggestions, feature requests, and pull requests are welcome.
 
 ## Disclaimer
 
-Classification is AI-assisted and may not always be correct. It's meant to help you quickly get a sense of what you're looking at — not to replace actually reading the paper. Please verify when accuracy matters.
+Classification is AI-assisted and may not always be correct. It's meant to help you quickly get a sense of what you're looking at - not to replace actually reading the paper. Please verify when accuracy matters.
 
 ---
 
