@@ -1,5 +1,42 @@
-
 # How Lens⁸¹ V1 Works
+
+A step-by-step walkthrough of the pipeline, the browser APIs each step relies on, and the external services involved — with links to the actual documentation for anything you might want to verify or extend.
+
+## Overview
+
+```
+Google Scholar results page
+        │  content.js reads each result's title, shows an instant
+        │  title-keyword guess immediately
+        ▼
+chrome.runtime.sendMessage  ───────────────►  background.js (service worker)
+                                                     │
+                                                     │  1. check chrome.storage.local cache
+                                                     ▼
+                                    Semantic Scholar  +  OpenAlex   (queried in parallel)
+                                                     │
+                                                     │  2. abstract found (or not)
+                                                     ▼
+                                          OpenRouter chat completion
+                                          (your own API key + model)
+                                                     │
+                                                     │  3. {"type": "...", "confidence": N}
+                                                     ▼
+                                          cached + sent back to content.js
+        ◄────────────────────────────────────────────
+        │
+        ▼
+Badge swapped in next to the title; toolbar icon count updated
+```
+
+## 1. Reading the page
+
+`content.js` is a [content script](https://developer.chrome.com/docs/extensions/reference/manifest/content-scripts), declared in `manifest.json` to run only on `https://scholar.google.com/*` at `document_idle` — after the DOM is built but without waiting for every subresource. It has no special permissions of its own; it can read and modify the page's DOM, and talk to the rest of the extension only through message passing.
+
+Google Scholar doesn't re-render the whole page on every interaction, so the script also sets up a [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) to catch results that get added to the DOM after the initial scan, debounced by 150ms so a burst of DOM changes doesn't trigger a scan storm.
+
+For each result, it reads the title and immediately renders a dashed, low-confidence badge based on a simple keyword regex (`survey`, `review`, `meta-analysis`, etc.) — this is what makes the page feel instant even though the real answer takes a moment to arrive.
+
 
 A step-by-step walkthrough of the pipeline, the browser APIs each step relies on, and the external services involved — with links to the actual documentation for anything you might want to verify or extend.
 
